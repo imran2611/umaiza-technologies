@@ -1,0 +1,37 @@
+:root {
+  /* Brand colors */
+  --color-navy: #101820;
+  --color-blue: #315efb;
+  --color-purple: #8057e8;
+  --color-white: #ffffff;
+  --color-text: #172033;
+
+  /* Supporting tones */
+  --color-muted: #5b6475;
+  --color-border: #e6e9f0;
+  --color-surface: #f6f8fc;
+
+  /* Gradient */
+  --gradient-brand: linear-gradient(135deg, #315efb 0%, #8057e8 100%);
+
+  /* Typography */
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-heading: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+
+  /* Layout */
+  --navbar-height: 104px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(16, 24, 32, 0.06);
+  --shadow-md: 0 10px 30px rgba(16, 24, 32, 0.1);
+  --shadow-lg: 0 24px 60px rgba(49, 94, 251, 0.18);
+
+  /* Motion */
+  --transition: all 0.25s ease;
+  @media (max-width: 991px) {
+  :root { --navbar-height: 76px; }
+}
+}
