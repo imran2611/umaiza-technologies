@@ -1,3 +1,4 @@
+const path = require("path");
 const CareerApplication = require("../models/CareerApplication");
 const { sendCareerEmail } = require("../services/emailService");
 const formatValidationErrors = require("../utils/formatValidationErrors");
@@ -6,6 +7,10 @@ const ALLOWED_FIELDS = ["fullName", "email", "phone", "position", "experience", 
 
 const SUCCESS_MESSAGE =
   "Thank you for applying! We have received your application and will contact you if a suitable role opens.";
+
+// File ka naam safe banata hai (folder path hatata hai, ajeeb characters _ se badalta hai)
+const cleanFileName = (name) =>
+  path.basename(name || "resume").replace(/[^\w.\- ()]/g, "_").slice(0, 200);
 
 // POST /api/careers
 const createApplication = async (req, res) => {
@@ -22,6 +27,23 @@ const createApplication = async (req, res) => {
   });
   data.ipAddress = req.ip || "";
 
+  // Resume aayi hai to uski details database ke liye taiyar karo
+  let resumeFile = null;
+  if (req.file) {
+    resumeFile = {
+      filename: cleanFileName(req.file.originalname),
+      content: req.file.buffer,
+      mimeType: req.file.mimetype,
+      size: req.file.size,
+    };
+    data.resume = {
+      originalName: resumeFile.filename,
+      mimeType: resumeFile.mimeType,
+      size: resumeFile.size,
+      data: resumeFile.content,
+    };
+  }
+
   let application;
   try {
     application = await CareerApplication.create(data);
@@ -37,7 +59,7 @@ const createApplication = async (req, res) => {
   }
 
   try {
-    await sendCareerEmail(application);
+    await sendCareerEmail(application, resumeFile);
     await CareerApplication.updateOne({ _id: application._id }, { emailSent: true });
   } catch (emailError) {
     console.error(`Application ${application._id} saved, but email failed:`, emailError.message);

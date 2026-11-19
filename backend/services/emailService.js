@@ -1,4 +1,3 @@
-
 const { Resend } = require("resend");
 const escapeHtml = require("../utils/escapeHtml");
 
@@ -22,7 +21,7 @@ const row = (label, value) => `
     <td style="padding:10px 12px;border:1px solid #e6e9f0;">${escapeHtml(value || "-").replace(/\n/g, "<br>")}</td>
   </tr>`;
 
-const sendEmail = async ({ subject, html, text, replyTo }) => {
+const sendEmail = async ({ subject, html, text, replyTo, attachments }) => {
   const to = process.env.EMAIL_TO;
 
   if (!to) {
@@ -36,6 +35,8 @@ const sendEmail = async ({ subject, html, text, replyTo }) => {
     subject,
     html,
     text,
+    // attachments sirf tab jaayenge jab file ho
+    ...(attachments && attachments.length ? { attachments } : {}),
   });
 
   if (error) {
@@ -95,11 +96,13 @@ const sendEnquiryEmail = async (enquiry) => {
   });
 };
 
-const sendCareerEmail = async (application) => {
+// resumeFile = { filename, content (Buffer), mimeType, size } ya null
+const sendCareerEmail = async (application, resumeFile) => {
   const safeName = application.fullName.replace(/[\r\n]+/g, " ");
   const received = new Date(application.createdAt).toLocaleString("en-IN", {
     timeZone: "Asia/Kolkata",
   });
+  const resumeLabel = resumeFile ? `${resumeFile.filename} (attached)` : "Not uploaded";
 
   const html = `
     <div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#172033;">
@@ -112,6 +115,7 @@ const sendCareerEmail = async (application) => {
         ${row("Role Applied", application.position)}
         ${row("Experience", application.experience)}
         ${row("Profile Link", application.profileLink)}
+        ${row("Resume", resumeLabel)}
         ${row("About", application.message)}
       </table>
       <p style="margin-top:16px;color:#5b6475;font-size:13px;">
@@ -128,6 +132,7 @@ const sendCareerEmail = async (application) => {
     `Role: ${application.position}`,
     `Experience: ${application.experience}`,
     `Profile link: ${application.profileLink || "-"}`,
+    `Resume: ${resumeLabel}`,
     `About: ${application.message}`,
   ].join("\n");
 
@@ -136,6 +141,9 @@ const sendCareerEmail = async (application) => {
     html,
     text,
     replyTo: application.email,
+    attachments: resumeFile
+      ? [{ filename: resumeFile.filename, content: resumeFile.content }]
+      : undefined,
   });
 };
 

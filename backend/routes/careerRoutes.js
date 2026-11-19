@@ -1,6 +1,7 @@
 const express = require("express");
 const rateLimit = require("express-rate-limit");
 const { createApplication } = require("../controllers/careerController");
+const { handleResumeUpload } = require("../middleware/uploadMiddleware");
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ const careerLimiter = rateLimit({
   },
 });
 
-router.post("/", careerLimiter, createApplication);
+// Order important hai: pehle limiter, phir resume upload, phir controller
+router.post("/", careerLimiter, handleResumeUpload, createApplication);
 
 module.exports = router;
