@@ -1,5 +1,6 @@
 const { Resend } = require("resend");
-const escapeHtml = require("../utils/escapeHtml");
+const {escapeHtml} = require("../utils/escapeHtml");
+const { careerEmailHtml } = require("./emailTemplates");
 
 let resend;
 
@@ -104,25 +105,10 @@ const sendCareerEmail = async (application, resumeFile) => {
   });
   const resumeLabel = resumeFile ? `${resumeFile.filename} (attached)` : "Not uploaded";
 
-  const html = `
-    <div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#172033;">
-      <h2 style="margin:0 0 4px;color:#315efb;">New Career Application</h2>
-      <p style="margin:0 0 16px;color:#5b6475;">Received on ${escapeHtml(received)} (IST)</p>
-      <table style="border-collapse:collapse;width:100%;font-size:14px;">
-        ${row("Name", application.fullName)}
-        ${row("Email", application.email)}
-        ${row("Phone", application.phone)}
-        ${row("Role Applied", application.position)}
-        ${row("Experience", application.experience)}
-        ${row("Profile Link", application.profileLink)}
-        ${row("Resume", resumeLabel)}
-        ${row("About", application.message)}
-      </table>
-      <p style="margin-top:16px;color:#5b6475;font-size:13px;">
-        Tip: click Reply to answer ${escapeHtml(safeName)} directly.
-      </p>
-    </div>`;
+  // Design ab emailTemplates/careerApplication.js se aata hai
+  const html = careerEmailHtml(application, { resumeFile });
 
+  // Plain text version (jin email apps mein HTML nahi khulta, unke liye)
   const text = [
     "New Career Application",
     `Received: ${received} (IST)`,
