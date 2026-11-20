@@ -41,6 +41,15 @@ const careerApplicationSchema = new mongoose.Schema(
       maxlength: [2000, "Message must be at most 2000 characters"],
     },
 
+    // Resume (optional). File MongoDB mein save hoti hai, isliye Render restart par bhi bachi rehti hai.
+    resume: {
+      originalName: { type: String, trim: true, maxlength: 255 },
+      mimeType: { type: String, trim: true, maxlength: 150 },
+      size: { type: Number },
+      // select:false = normal query mein badi file load nahi hogi
+      data: { type: Buffer, select: false },
+    },
+
     // Backend ke fields
     status: { type: String, enum: APPLICATION_STATUSES, default: "new" },
     adminNotes: { type: String, trim: true, maxlength: 2000, default: "" },
