@@ -5,11 +5,11 @@ import Reveal from "../components/common/Reveal";
 import SectionHeading from "../components/common/SectionHeading";
 import FormField from "../components/common/FormField";
 import { useForm } from "../hooks/useForm";
-import { isEmail, isPhone, isUrl } from "../utils/validators";
+import { isEmail, isPhone, isUrl, getResumeError } from "../utils/validators";
 import { submitCareerApplication } from "../services/enquiryService";
 import { careerPerks, careerRoles, experienceLevels } from "../data/siteData";
 
-const initial = { fullName: "", email: "", phone: "", position: "", experience: "", profileLink: "", message: "", website: "" };
+const initial = { fullName: "", email: "", phone: "", position: "", experience: "", profileLink: "", message: "", website: "", resume: null };
 function validate(v) {
   const e = {};
   if (v.fullName.trim().length < 2) e.fullName = "Please enter your full name.";
@@ -18,6 +18,8 @@ function validate(v) {
   if (!v.position) e.position = "Please select a role.";
   if (!v.experience) e.experience = "Please select your experience.";
   if (v.profileLink.trim() && !isUrl(v.profileLink)) e.profileLink = "Please enter a valid link starting with https://";
+  const resumeError = getResumeError(v.resume);
+  if (resumeError) e.resume = resumeError;
   if (v.message.trim().length < 20) e.message = "Please write at least 20 characters about yourself.";
   return e;
 }
@@ -99,6 +101,18 @@ function Careers() {
                     </div>
                     <div className="col-md-6">
                       <FormField label="Resume / LinkedIn / GitHub Link" name="profileLink" type="url" value={values.profileLink} onChange={handleChange} error={errors.profileLink} placeholder="https://" />
+                    </div>
+                    <div className="col-12">
+                      <FormField
+                        label="Upload Resume"
+                        name="resume"
+                        type="file"
+                        accept=".pdf,.doc,.docx"
+                        value={values.resume}
+                        onChange={handleChange}
+                        error={errors.resume}
+                        hint="Optional. PDF, DOC or DOCX, up to 5 MB."
+                      />
                     </div>
                     <div className="col-12">
                       <FormField label="About You" name="message" as="textarea" rows={4} value={values.message} onChange={handleChange} error={errors.message} placeholder="Tell us about your skills and what you want to work on." required />

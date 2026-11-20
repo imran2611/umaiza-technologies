@@ -7,8 +7,11 @@ export function useForm(initialValues, validate, onSubmit) {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, files } = e.target;
+    // File input ho to asli file lo, warna normal value
+    const newValue = type === "file" ? files[0] || null : value;
+
+    setValues((prev) => ({ ...prev, [name]: newValue }));
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
