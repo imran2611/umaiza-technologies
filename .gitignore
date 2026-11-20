@@ -25,5 +25,6 @@ desktop.ini
 .vscode/
 .idea/
 
-
-
+# Uploaded private documents
+backend/storage/uploads/*
+!backend/storage/uploads/.gitkeep
