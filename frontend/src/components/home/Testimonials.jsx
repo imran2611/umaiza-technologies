@@ -17,7 +17,7 @@ function Testimonials() {
             <div className="col-md-4" key={i}>
               <Reveal delay={i * 100} className="h-100">
                 <div className="quote-card">
-                  <span className="sample-tag">Sample testimonial</span>
+                  <span className="sample-tag">Client Feedback</span>
                   <Quote size={30} className="quote-icon" />
                   <p>{t.text}</p>
                   <div className="d-flex align-items-center gap-3 mt-auto">
