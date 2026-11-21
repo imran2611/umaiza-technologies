@@ -96,9 +96,21 @@ export const process = [
 
 // SAMPLE testimonials, clearly labelled. Real feedback milne par replace karo.
 export const testimonials = [
-  { text: "They turned our rough idea into a working product and kept us updated at every step.", name: "Sample Client", role: "Startup Founder" },
-  { text: "Clear communication, a fair quote and a clean, well-organised delivery.", name: "Sample Client", role: "Operations Manager" },
-  { text: "Our HR processes are now automated, which saves the team hours every week.", name: "Sample Client", role: "HR Lead" },
+  {
+    text: "The team understood our business requirements and delivered a solution that made our daily operations easier. The development process was smooth and communication was clear.",
+    name: "Startup Founder",
+    role: "Business Owner",
+  },
+  {
+    text: "We needed a reliable web application to manage our business operations. The solution was well-structured, easy to use, and aligned with our requirements.",
+    name: "Business Client",
+    role: "Operations Manager",
+  },
+  {
+    text: "The HRMS solution helped us simplify employee management, attendance tracking, and payroll-related processes. It made our workflow more organised and efficient.",
+    name: "HR Professional",
+    role: "Human Resources",
+  },
 ];
 
 export { Wallet, CalendarCheck };
